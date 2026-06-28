@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { getResultByStep } from "../salaryUtils";
 import { SalaryResultDisplay } from "./SalaryResultDisplay";
+import { motion } from "framer-motion";
 
 export const SalaryComparisonTable: React.FC = () => {
   const [activeTab, setActiveTab] = useState(0);
@@ -21,52 +22,55 @@ export const SalaryComparisonTable: React.FC = () => {
     supplementaryFund: 0.05,
   });
 
+  const tabs = [
+    { id: 0, label: "无补充公积金 (7%)", list: resultList },
+    { id: 1, label: "有补充公积金 (5%+5%)", list: supplementaryFundResultList }
+  ];
+
   return (
-    <div className="p-4 space-y-6">
-      <div className="border-b border-gray-200">
-        <nav className="-mb-px flex space-x-8">
-          <button
-            onClick={() => setActiveTab(0)}
-            className={`${
-              activeTab === 0
-                ? "border-blue-500 text-blue-600"
-                : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
-            } whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm`}
-          >
-            无补充公积金
-          </button>
-          <button
-            onClick={() => setActiveTab(1)}
-            className={`${
-              activeTab === 1
-                ? "border-blue-500 text-blue-600"
-                : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
-            } whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm`}
-          >
-            有补充公积金
-          </button>
-        </nav>
+    <div className="space-y-6 font-sans">
+      {/* Sub Tab Navigation */}
+      <div className="flex justify-start">
+        <div className="flex bg-gray-50 border border-gray-100 p-1.5 rounded-lg shadow-sm relative">
+          {tabs.map((tab) => (
+            <button
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id)}
+              className="relative px-4 py-2 text-xs sm:text-sm font-semibold rounded-md transition-colors duration-200 z-10 w-36 sm:w-44 text-center focus:outline-none"
+              style={{
+                color: activeTab === tab.id ? "#4f46e5" : "#4b5563",
+              }}
+            >
+              {activeTab === tab.id && (
+                <motion.div
+                  layoutId="subTabUnderline"
+                  className="absolute inset-0 bg-white rounded-md shadow-sm border border-gray-100"
+                  transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                />
+              )}
+              <span className="relative z-20">{tab.label}</span>
+            </button>
+          ))}
+        </div>
       </div>
 
-      <div className="space-y-4">
-        {activeTab === 0
-          ? resultList.map((x, index) => (
-              <SalaryResultDisplay
-                key={index}
-                data={x}
-                compact
-                showChart={false}
-              />
-            ))
-          : supplementaryFundResultList.map((x, index) => (
-              <SalaryResultDisplay
-                key={index}
-                data={x}
-                compact
-                showChart={false}
-              />
-            ))}
-      </div>
+      {/* List Container with fade-in and page transition */}
+      <motion.div
+        key={activeTab}
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.3 }}
+        className="space-y-4"
+      >
+        {tabs[activeTab].list.map((x, index) => (
+          <SalaryResultDisplay
+            key={index}
+            data={x}
+            compact
+            showChart={false}
+          />
+        ))}
+      </motion.div>
     </div>
   );
 };
