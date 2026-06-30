@@ -9,16 +9,16 @@
     "publish": "bash publish.bash"
   },
   "dependencies": {
+    "@ant-design/icons": "^5.0.1",
     "@types/downloadjs": "^1.4.3",
     "@types/mockjs": "^1.0.6",
     "@types/react-split-pane": "^0.1.67",
     "add": "^2.0.6",
-    "@ant-design/icons": "^5.0.1",
     "antd": "^5.1.7",
     "date-fns": "^4.1.0",
     "downloadjs": "^1.4.7",
     "easy-salary": "^1.0.1",
-    "framer-motion": "^11.18.2",
+    "framer-motion": "^6.5.1",
     "json-to-ts": "^1.7.0",
     "json5": "^2.2.1",
     "jsonrepair": "^3.12.0",
